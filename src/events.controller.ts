@@ -6,18 +6,22 @@ import {
   Patch,
   Param,
   Body,
+  HttpCode,
 } from '@nestjs/common';
 
 @Controller('/events')
 export class EventsController {
   @Get()
   findAll() {
-    return 'This action returns all events';
+    return [
+      { id: 1, name: 'First Event' },
+      { id: 2, name: 'Second Event' },
+    ];
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return `This action returns a #${id} event`;
+    return { id: 1, name: 'First Event' };
   }
 
   @Post()
@@ -26,12 +30,12 @@ export class EventsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string) {
-    return `This action updates a #${id} event`;
+  update(@Param('id') id: string, @Body() input: any) {
+    return input;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return `This action removes a #${id} event`;
-  }
+  @HttpCode(204)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  remove(@Param('id') id: string, @Body() input: any) {}
 }
