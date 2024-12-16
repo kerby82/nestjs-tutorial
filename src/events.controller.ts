@@ -9,6 +9,8 @@ import {
   HttpCode,
 } from '@nestjs/common';
 
+import { CreateEventDto } from './create-event.dto';
+
 @Controller('/events')
 export class EventsController {
   @Get()
@@ -25,7 +27,7 @@ export class EventsController {
   }
 
   @Post()
-  create(@Body() input) {
+  create(@Body() input: CreateEventDto) {
     return input;
   }
 
