@@ -58,8 +58,7 @@ export class EventsController {
 
   @Delete(':id')
   @HttpCode(204)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  remove(@Param('id') id: string, @Body() input: any) {
+  remove(@Param('id') id: string) {
     this.events = this.events.filter((event) => event.id !== +id);
   }
 }
