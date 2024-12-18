@@ -9,6 +9,7 @@ import {
   HttpCode,
   Inject,
   ParseIntPipe,
+  ValidationPipe,
 } from '@nestjs/common';
 import { Repository, MoreThan, Like } from 'typeorm';
 
@@ -58,7 +59,7 @@ export class EventsController {
   }
 
   @Post()
-  async create(@Body() input: CreateEventDto) {
+  async create(@Body(ValidationPipe) input: CreateEventDto) {
     return await this.repository.save({
       id: this.events.length + 1,
       ...input,
