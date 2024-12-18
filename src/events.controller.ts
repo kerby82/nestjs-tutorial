@@ -9,36 +9,57 @@ import {
   HttpCode,
 } from '@nestjs/common';
 
+import { Event } from './event.entity';
+
 import { CreateEventDto } from './create-event.dto';
 import { UpdateEventDto } from './update-event.dto';
 
 @Controller('/events')
 export class EventsController {
+  private events: Event[] = [];
+
   @Get()
   findAll() {
-    return [
-      { id: 1, name: 'First Event' },
-      { id: 2, name: 'Second Event' },
-    ];
+    return this.events;
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return { id: 1, name: 'First Event' };
+    const event = this.events.find((event) => event.id === +id);
+
+    return event;
   }
 
   @Post()
   create(@Body() input: CreateEventDto) {
-    return input;
+    const event = {
+      id: this.events.length + 1,
+      ...input,
+      when: new Date(input.when),
+    };
+
+    this.events.push(event);
+
+    return event;
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() input: UpdateEventDto) {
-    return input;
+    const index = this.events.findIndex((event) => event.id === +id);
+
+    this.events[index] = {
+      ...this.events[index],
+      ...input,
+      when: input.when ? new Date(input.when) : this.events[index].when,
+    };
+
+    return this.events[index];
   }
 
   @Delete(':id')
   @HttpCode(204)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  remove(@Param('id') id: string, @Body() input: any) {}
+  remove(@Param('id') id: string, @Body() input: any) {
+    this.events = this.events.filter((event) => event.id !== +id);
+  }
 }
