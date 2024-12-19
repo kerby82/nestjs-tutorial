@@ -4,9 +4,12 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EventsModule } from './events/events.module';
 import { Event } from './events/event.entity';
+import { AppJapanService } from './app.japan.service';
+import { AppDummy } from './app.dummy';
 
 @Module({
   imports: [
+    // forRoot() is used to configure a dynamic module
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -17,10 +20,24 @@ import { Event } from './events/event.entity';
       entities: [Event],
       synchronize: true,
     }),
-
     EventsModule, // this does the same as the entities array in the TypeOrmModule.forRoot() call
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: AppService,
+      useClass: AppJapanService,
+    },
+    {
+      provide: 'APP_NAME',
+      useValue: 'Nest Events',
+    },
+    {
+      provide: 'MESSAGE',
+      inject: [AppDummy],
+      useFactory: (app: AppDummy) => `${app.dummy()} Factory!`,
+    },
+    AppDummy,
+  ],
 })
 export class AppModule {}
