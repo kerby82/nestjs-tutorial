@@ -7,9 +7,9 @@ import {
   Param,
   Body,
   HttpCode,
-  Inject,
   ParseIntPipe,
   ValidationPipe,
+  Logger,
 } from '@nestjs/common';
 import { Repository, MoreThan, Like } from 'typeorm';
 
@@ -21,16 +21,22 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 @Controller('/events')
 export class EventsController {
+  private readonly logger = new Logger(EventsController.name);
+
   constructor(
     @InjectRepository(Event)
-    private readonly repository: Repository<Event>
+    private readonly repository: Repository<Event>,
   ) {}
 
   private events: Event[] = [];
 
   @Get()
   async findAll() {
-    return this.repository.find();
+    this.logger.log('Hit the events endpoint');
+    const events = this.repository.find();
+    this.logger.debug(`Retrieved events: ${(await events).length}`);
+
+    return events;
   }
 
   @Get('/practice')
