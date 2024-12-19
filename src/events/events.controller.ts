@@ -10,8 +10,9 @@ import {
   ParseIntPipe,
   ValidationPipe,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
-import { Repository, MoreThan, Like } from 'typeorm';
+import { Repository, MoreThan, Like, Not } from 'typeorm';
 
 import { Event } from './event.entity';
 
@@ -61,7 +62,16 @@ export class EventsController {
 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.repository.findOneBy({ id: id });
+    const event = await this.repository.findOneBy({ id: id });
+
+    if (!event) {
+      this.logger.debug(`Event with ID ${id} not found`);
+      throw new NotFoundException();
+    }
+
+    this.logger.debug(`Retrieved event with ID ${id}`);
+
+    return event;
   }
 
   @Post()
@@ -77,6 +87,11 @@ export class EventsController {
   async update(@Param('id') id: string, @Body() input: UpdateEventDto) {
     const event = await this.repository.findOneBy({ id: +id });
 
+    if (!event) {
+      this.logger.debug(`Event with ID ${id} not found`);
+      throw new NotFoundException();
+    }
+
     return await this.repository.save({
       ...event,
       ...input,
@@ -88,6 +103,12 @@ export class EventsController {
   @HttpCode(204)
   async remove(@Param('id') id: string) {
     const event = await this.repository.findOneBy({ id: +id });
+
+    if (!event) {
+      this.logger.debug(`Event with ID ${id} not found`);
+      throw new NotFoundException();
+    }
+
     await this.repository.remove(event);
   }
 }
