@@ -19,6 +19,7 @@ import { Event } from './event.entity';
 import { CreateEventDto } from './create-event.dto';
 import { UpdateEventDto } from './update-event.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { EventsService } from './events.service';
 
 @Controller('/events')
 export class EventsController {
@@ -27,6 +28,7 @@ export class EventsController {
   constructor(
     @InjectRepository(Event)
     private readonly repository: Repository<Event>,
+    private readonly eventsService: EventsService,
   ) {}
 
   private events: Event[] = [];
@@ -70,9 +72,19 @@ export class EventsController {
     });
   }
 
+  @Get('/practice3')
+  async practice3() {
+    return await this.repository
+      .createQueryBuilder('e')
+      .select(['e.id', 'e.name'])
+      .orderBy('e.id', 'DESC')
+      .take(2)
+      .getMany();
+  }
+
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    const event = await this.repository.findOneBy({ id: id });
+    const event = await this.eventsService.getEvent(id);
 
     if (!event) {
       this.logger.debug(`Event with ID ${id} not found`);
