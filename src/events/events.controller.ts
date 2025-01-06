@@ -11,15 +11,17 @@ import {
   ValidationPipe,
   Logger,
   NotFoundException,
+  Query
 } from '@nestjs/common';
 import { Repository, MoreThan, Like, Not } from 'typeorm';
 
 import { Event } from './event.entity';
 
-import { CreateEventDto } from './create-event.dto';
-import { UpdateEventDto } from './update-event.dto';
+import { CreateEventDto } from './input/create-event.dto';
+import { UpdateEventDto } from './input/update-event.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EventsService } from './events.service';
+import { ListEvents } from './input/list.events';
 
 @Controller('/events')
 export class EventsController {
@@ -34,9 +36,11 @@ export class EventsController {
   private events: Event[] = [];
 
   @Get()
-  async findAll() {
+  async findAll(@Query() filter: ListEvents) {
+    this.logger.debug('Filter is: ' + JSON.stringify(filter));
     this.logger.log('Hit the events endpoint');
-    const events = this.repository.find();
+    const events =
+      this.eventsService.getEventsWithAttendeeCountFiltered(filter);
     this.logger.debug(`Retrieved events: ${(await events).length}`);
 
     return events;
@@ -115,7 +119,6 @@ export class EventsController {
     }
 
     return await this.repository.save({
-      ...event,
       ...input,
       when: input.when ? new Date(input.when) : event?.when,
     });
