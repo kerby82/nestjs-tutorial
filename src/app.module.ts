@@ -8,6 +8,7 @@ import { AppDummy } from './app.dummy';
 import { ConfigModule } from '@nestjs/config';
 import ormConfig from './config/orm.config';
 import ormConfigProd from './config/orm.config.prod';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import ormConfigProd from './config/orm.config.prod';
         process.env.NODE_ENV === 'production' ? ormConfigProd : ormConfig,
     }), // this is used to connect to the database
     EventsModule, // this does the same as the entities array in the TypeOrmModule.forRoot() call
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
