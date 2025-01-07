@@ -9,9 +9,10 @@ import {
   HttpCode,
   ParseIntPipe,
   ValidationPipe,
+  UsePipes,
   Logger,
   NotFoundException,
-  Query
+  Query,
 } from '@nestjs/common';
 import { Repository, MoreThan, Like, Not } from 'typeorm';
 
@@ -36,12 +37,21 @@ export class EventsController {
   private events: Event[] = [];
 
   @Get()
+  @UsePipes(new ValidationPipe({ transform: true }))
   async findAll(@Query() filter: ListEvents) {
     this.logger.debug('Filter is: ' + JSON.stringify(filter));
     this.logger.log('Hit the events endpoint');
+    const paginationOptions = {
+      limit: 2,
+      currentPage: filter.page,
+      total: true,
+    };
     const events =
-      this.eventsService.getEventsWithAttendeeCountFiltered(filter);
-    this.logger.debug(`Retrieved events: ${(await events).length}`);
+      this.eventsService.getEventsWithAttendeeCountFilteredPaginated(
+        filter,
+        paginationOptions,
+      );
+    this.logger.debug(`Retrieved events: ${(await events).total}`);
 
     return events;
   }
