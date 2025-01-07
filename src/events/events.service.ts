@@ -7,6 +7,7 @@ import { AttendeeAnswerEnum } from './attendee.entity';
 import { ListEvents } from './input/list.events';
 import { WhenEventFilter } from './input/list.events';
 import { PaginateOptions, paginate } from '../pagination/paginator';
+import { DeleteResult } from 'typeorm';
 
 @Injectable()
 export class EventsService {
@@ -129,5 +130,13 @@ export class EventsService {
       await this.getEventsWithAttendeeCountFiltered(filter),
       paginateOptions,
     );
+  }
+
+  public async deleteEvent(id: number): Promise<DeleteResult> {
+    return await this.eventRepository
+      .createQueryBuilder('e')
+      .delete()
+      .where('e.id = :id', { id })
+      .execute();
   }
 }
