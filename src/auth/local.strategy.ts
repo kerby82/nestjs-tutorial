@@ -4,12 +4,16 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   private logger = new Logger(LocalStrategy.name);
 
-  constructor(private readonly userRepository: Repository<User>) {
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {
     super();
   }
 
