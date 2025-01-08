@@ -10,6 +10,7 @@ import { PaginateOptions, paginate } from '../pagination/paginator';
 import { DeleteResult } from 'typeorm';
 import { CreateEventDto } from './input/create-event.dto';
 import { User } from '../auth/user.entity';
+import { UpdateEventDto } from './input/update-event.dto';
 
 @Injectable()
 export class EventsService {
@@ -147,6 +148,14 @@ export class EventsService {
       ...input,
       organizer: user,
       when: new Date(input.when),
+    });
+  }
+
+  public async updateEvent(event: Event, input: UpdateEventDto) {
+    return await this.eventRepository.save({
+      ...event,
+      ...input,
+      when: input.when ? new Date(input.when) : event.when,
     });
   }
 }
