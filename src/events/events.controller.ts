@@ -14,6 +14,9 @@ import {
   NotFoundException,
   Query,
   ForbiddenException,
+  SerializeOptions,
+  ClassSerializerInterceptor,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Repository, MoreThan, Like, Not } from 'typeorm';
 
@@ -30,6 +33,9 @@ import { AuthGuardJwt } from 'src/auth/auth-guard.jwt';
 import { UseGuards } from '@nestjs/common';
 
 @Controller('/events')
+@SerializeOptions({
+  strategy: 'excludeAll',
+})
 export class EventsController {
   private readonly logger = new Logger(EventsController.name);
 
@@ -102,6 +108,7 @@ export class EventsController {
   }
 
   @Get(':id')
+  @UseInterceptors(ClassSerializerInterceptor)
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const event = await this.eventsService.getEvent(id);
 
@@ -117,6 +124,7 @@ export class EventsController {
 
   @Post()
   @UseGuards(AuthGuardJwt)
+  @UseInterceptors(ClassSerializerInterceptor)
   async create(
     @Body(ValidationPipe) input: CreateEventDto,
     @CurrentUser() user: User,
@@ -128,6 +136,7 @@ export class EventsController {
 
   @Patch(':id')
   @UseGuards(AuthGuardJwt)
+  @UseInterceptors(ClassSerializerInterceptor)
   async update(
     @Param('id') id: string,
     @Body() input: UpdateEventDto,
