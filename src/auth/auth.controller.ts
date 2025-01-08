@@ -3,15 +3,18 @@ import { Post } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UseGuards } from '@nestjs/common';
 import { Request } from '@nestjs/common';
+import { AuthService } from './auth.service';
 
 @Controller('/auth')
 export class AuthController {
+  constructor(private readonly authService: AuthService) {}
+
   @Post('/login')
   @UseGuards(AuthGuard('local'))
   async login(@Request() request) {
     return {
       userId: request.user.id,
-      token: 'fake-jwt-token',
+      token: this.authService.getTokenForUser(request.user),
     };
   }
 }
