@@ -8,6 +8,8 @@ import { ListEvents } from './input/list.events';
 import { WhenEventFilter } from './input/list.events';
 import { PaginateOptions, paginate } from '../pagination/paginator';
 import { DeleteResult } from 'typeorm';
+import { CreateEventDto } from './input/create-event.dto';
+import { User } from '../auth/user.entity';
 
 @Injectable()
 export class EventsService {
@@ -138,5 +140,13 @@ export class EventsService {
       .delete()
       .where('e.id = :id', { id })
       .execute();
+  }
+
+  public async createEvent(input: CreateEventDto, user: User): Promise<Event> {
+    return await this.eventRepository.save({
+      ...input,
+      organizer: user,
+      when: new Date(input.when),
+    });
   }
 }

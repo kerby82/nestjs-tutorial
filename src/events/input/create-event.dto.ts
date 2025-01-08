@@ -10,4 +10,4 @@ export class CreateEventDto {
   when: string;
   @Length(5, 255)
   address: string;
-};
+}

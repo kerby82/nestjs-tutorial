@@ -23,6 +23,10 @@ import { UpdateEventDto } from './input/update-event.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EventsService } from './events.service';
 import { ListEvents } from './input/list.events';
+import { CurrentUser } from 'src/auth/current-user.decorator';
+import { User } from 'src/auth/user.entity';
+import { AuthGuardJwt } from 'src/auth/auth-guard.jwt';
+import { UseGuards } from '@nestjs/common';
 
 @Controller('/events')
 export class EventsController {
@@ -111,12 +115,14 @@ export class EventsController {
   }
 
   @Post()
-  async create(@Body(ValidationPipe) input: CreateEventDto) {
-    return await this.repository.save({
-      id: this.events.length + 1,
-      ...input,
-      when: new Date(input.when),
-    });
+  @UseGuards(AuthGuardJwt)
+  async create(
+    @Body(ValidationPipe) input: CreateEventDto,
+    @CurrentUser() user: User,
+  ) {
+    this.logger.debug(`User ${user.id} is creating an event`);
+    this.logger.debug(`Creating event with data: ${JSON.stringify(input)}`);
+    return await this.eventsService.createEvent(input, user);
   }
 
   @Patch(':id')

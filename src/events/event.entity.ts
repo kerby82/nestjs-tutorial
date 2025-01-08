@@ -1,5 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Attendee } from './attendee.entity';
+import { User } from 'src/auth/user.entity';
 
 @Entity('events')
 export class Event {
@@ -20,6 +28,11 @@ export class Event {
   attendees: Attendee[];
   attendeesCount?: number;
   attendeeRejected?: number;
-  attendeeAccepted?: number;
-  attendeeMaybe?: number;
+
+  @ManyToOne(() => User, (user) => user.organized)
+  @JoinColumn({ name: 'organizerId' })
+  organizer: User;
+
+  @Column({ nullable: true })
+  organizerId: number;
 }
