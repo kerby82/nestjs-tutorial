@@ -49,6 +49,7 @@ export class EventsController {
 
   @Get()
   @UsePipes(new ValidationPipe({ transform: true }))
+  @UseInterceptors(ClassSerializerInterceptor)
   async findAll(@Query() filter: ListEvents) {
     this.logger.debug('Filter is: ' + JSON.stringify(filter));
     this.logger.log('Hit the events endpoint');
