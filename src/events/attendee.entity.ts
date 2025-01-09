@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Event } from './event.entity';
 import { User } from '../auth/user.entity';
+import { Expose } from 'class-transformer';
 
 export enum AttendeeAnswerEnum {
   Accepted = 1,
@@ -20,6 +21,7 @@ export class Attendee {
   id: number;
 
   @Column()
+  @Expose()
   name: string;
 
   @ManyToOne(() => Event, (event) => event.attendees, { nullable: false })
