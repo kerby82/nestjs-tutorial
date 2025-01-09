@@ -7,6 +7,7 @@ import { EventsAttendeesController } from './events-attendees.controller';
 import { AttendeesService } from './attendees.service';
 import { Attendee } from './attendee.entity';
 import { EventsOrganizedByUserController } from './events-organized-by-user.controller';
+import { CurrentUserEventAttendanceController } from './current-user-event-attendance.controller';
 
 @Module({
   // forFeature() is used to define which repositories are registered in the current scope
@@ -15,6 +16,7 @@ import { EventsOrganizedByUserController } from './events-organized-by-user.cont
     EventsController,
     EventsAttendeesController,
     EventsOrganizedByUserController,
+    CurrentUserEventAttendanceController,
   ],
   providers: [EventsService, AttendeesService],
 })
