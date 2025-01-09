@@ -11,6 +11,7 @@ import { DeleteResult } from 'typeorm';
 import { CreateEventDto } from './input/create-event.dto';
 import { User } from '../auth/user.entity';
 import { UpdateEventDto } from './input/update-event.dto';
+import { PaginatedEvents } from './event.entity';
 
 @Injectable()
 export class EventsService {
@@ -156,6 +157,22 @@ export class EventsService {
       ...event,
       ...input,
       when: input.when ? new Date(input.when) : event.when,
+    });
+  }
+
+  public async getEventsOrganizedByUserIdPaginated(
+    userId: number,
+    paginateOptions: PaginateOptions,
+  ): Promise<PaginatedEvents> {
+    return await paginate(
+      await this.getEventsOrganizedByUserIdQuery(userId),
+      paginateOptions,
+    );
+  }
+
+  private getEventsOrganizedByUserIdQuery(userId: number) {
+    return this.getEventsBaseQuery().where('e.organizerId = :userId', {
+      userId,
     });
   }
 }
