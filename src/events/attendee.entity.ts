@@ -6,6 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Event } from './event.entity';
+import { User } from '../auth/user.entity';
 
 export enum AttendeeAnswerEnum {
   Accepted = 1,
@@ -25,9 +26,18 @@ export class Attendee {
   @JoinColumn({ name: 'event_id', referencedColumnName: 'id' })
   event: Event;
 
+  @Column({ name: 'event_id' })
+  eventId: number;
+
   @Column('enum', {
     enum: AttendeeAnswerEnum,
     default: AttendeeAnswerEnum.Accepted,
   })
   answer: AttendeeAnswerEnum;
+
+  @ManyToOne(() => User, (user) => user.attended, { nullable: false })
+  user: User;
+
+  @Column({ name: 'user_id' })
+  userId: number;
 }
