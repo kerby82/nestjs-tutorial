@@ -13,6 +13,8 @@ import { AttendeesService } from './attendees.service';
 import { CreateAttendeeDto } from './input/create-attendee.dto';
 import { AuthGuardJwt } from 'src/auth/auth-guard.jwt';
 import { UseInterceptors } from '@nestjs/common';
+import { Query } from '@nestjs/common';
+import { DefaultValuePipe } from '@nestjs/common';
 
 @Controller('events-attendance')
 @SerializeOptions({ strategy: 'excludeAll' })
@@ -25,7 +27,10 @@ export class CurrentUserEventAttendanceController {
   @Get()
   @UseGuards(AuthGuardJwt)
   @UseInterceptors(ClassSerializerInterceptor)
-  async findAll(@CurrentUser() user: User, @Query('page') page = 1) {
+  async findAll(
+    @CurrentUser() user: User,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
+  ) {
     return await this.eventsService.getEventsAttendedByUserIdPaginated(
       user.id,
       { limit: 10, currentPage: page },

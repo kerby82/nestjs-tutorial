@@ -1,6 +1,7 @@
 import {
   ClassSerializerInterceptor,
   Controller,
+  ParseIntPipe,
   SerializeOptions,
   UseInterceptors,
 } from '@nestjs/common';
@@ -17,7 +18,7 @@ export class EventsAttendeesController {
 
   @Get()
   @UseInterceptors(ClassSerializerInterceptor)
-  async findAll(@Param('eventId') eventId: number) {
+  async findAll(@Param('eventId', ParseIntPipe) eventId: number) {
     this.logger.debug(`Retrieving attendees for event with ID: ${eventId}`);
     return this.attendeesService.findByEventId(eventId);
   }

@@ -13,6 +13,10 @@ import { PaginationResults } from 'src/pagination/paginator';
 
 @Entity('events')
 export class Event {
+  constructor(partial?: Partial<Event>) {
+    Object.assign(this, partial);
+  }
+
   @PrimaryGeneratedColumn() // auto-incrementing primary key
   @Expose()
   id: number;
