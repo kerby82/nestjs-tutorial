@@ -35,6 +35,8 @@ $ npm install
 ## Compile and run the project
 
 ```bash
+$ nvm use
+
 # development
 $ npm run start
 
