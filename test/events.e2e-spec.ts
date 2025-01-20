@@ -1,38 +1,27 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import * as fs from 'fs';
-import * as path from 'path';
 import * as request from 'supertest';
 import { Connection } from 'typeorm';
 import { AppModule } from './../src/app.module';
-import { AuthService } from './../src/auth/auth.service';
 import { User } from './../src/auth/user.entity';
+import {
+  loadFixtures as loadFixturesBase,
+  tokenForUser as tokenForUserBase,
+} from './utils';
 
 let app: INestApplication;
 let mod: TestingModule;
 let connection: Connection;
 
-const loadFixtures = async (sqlFileName: string) => {
-  const sql = fs.readFileSync(
-    path.join(__dirname, 'fixtures', sqlFileName),
-    'utf8',
-  );
+const loadFixtures = async (sqlFileName: string) =>
+  loadFixturesBase(connection, sqlFileName);
 
-  const queryRunner = connection.driver.createQueryRunner('master');
-
-  for (const c of sql.split(';')) {
-    await queryRunner.query(c);
-  }
-};
-
-export const tokenForUser = (
+const tokenForUser = (
   user: Partial<User> = {
     id: 1,
     username: 'e2e-test',
   },
-): string => {
-  return app.get(AuthService).getTokenForUser(user as User);
-};
+): string => tokenForUserBase(app, user);
 
 describe('Events (e2e)', () => {
   beforeEach(async () => {
@@ -103,7 +92,7 @@ describe('Events (e2e)', () => {
         expect(response.body).toMatchObject({
           statusCode: 400,
           message: [
-            'Name is too short or too long',
+            'The name length is wrong',
             'name must be a string',
             'description must be longer than or equal to 5 characters',
             'when must be a valid ISO 8601 date string',
@@ -188,7 +177,7 @@ describe('Events (e2e)', () => {
       .delete('/events/1')
       .set('Authorization', `Bearer ${tokenForUser()}`)
       .expect(204)
-      .then((_response) => {
+      .then((response) => {
         return request(app.getHttpServer()).get('/events/1').expect(404);
       });
   });
