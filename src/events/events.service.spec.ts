@@ -32,4 +32,20 @@ describe('EventsService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  describe('updateEvent', () => {
+    it('should update an event', async () => {
+      const repoSpy = jest
+        .spyOn(repository, 'save')
+        .mockResolvedValueOnce({ id: 1 } as Event);
+
+      expect(
+        service.updateEvent(new Event({ id: 1 }), {
+          name: 'Event Name',
+        }),
+      ).resolves.toEqual({ id: 1 });
+
+      expect(repoSpy).toBeCalledWith({ id: 1, name: 'Event Name' });
+    });
+  });
 });
