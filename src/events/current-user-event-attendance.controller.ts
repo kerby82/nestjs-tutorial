@@ -11,7 +11,7 @@ import { User } from '../auth/user.entity';
 import { EventsService } from './events.service';
 import { AttendeesService } from './attendees.service';
 import { CreateAttendeeDto } from './input/create-attendee.dto';
-import { AuthGuardJwt } from 'src/auth/auth-guard.jwt';
+import { AuthGuardJwt } from './../auth/auth-guard.jwt';
 import { UseInterceptors } from '@nestjs/common';
 import { Query } from '@nestjs/common';
 import { DefaultValuePipe } from '@nestjs/common';

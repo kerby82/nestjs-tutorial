@@ -1,9 +1,9 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Event } from '../events/event.entity';
 import { registerAs } from '@nestjs/config';
-import { Attendee } from 'src/events/attendee.entity';
-import { User } from 'src/auth/user.entity';
-import { Profile } from 'src/auth/profile.entity';
+import { Attendee } from './../events/attendee.entity';
+import { User } from './../auth/user.entity';
+import { Profile } from './../auth/profile.entity';
 
 export default registerAs(
   'orm.config',
