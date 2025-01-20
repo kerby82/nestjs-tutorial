@@ -1,16 +1,16 @@
 INSERT INTO
-    `user` (
-        `id`,
-        `username`,
-        `password`,
-        `email`,
-        `firstName`,
-        `lastName`,
-        `profileId`
+    "user" (
+        "id",
+        "username",
+        "password",
+        "email",
+        "firstName",
+        "lastName",
+        "profileId"
     )
 VALUES
     (
-        NULL,
+        DEFAULT,
         'e2e-test',
         '$2b$10$5v5ZIVbPGXf0126yUiiys.z/POxSaus.iSbzXj7cTRW9KWGy5bfcq',
         'e2e@test.com',
@@ -20,17 +20,17 @@ VALUES
     );
 
 INSERT INTO
-    `event` (
-        `id`,
-        `description`,
-        `when`,
-        `address`,
-        `name`,
-        `organizerId`
+    "events" (
+        "id",
+        "description",
+        "when",
+        "address",
+        "name",
+        "organizerId"
     )
 VALUES
     (
-        NULL,
+        DEFAULT,
         'That is a crazy event, must go there!',
         '2021-04-15 21:00:00',
         'Local St 101',
@@ -39,17 +39,17 @@ VALUES
     );
 
 INSERT INTO
-    `event` (
-        `id`,
-        `description`,
-        `when`,
-        `address`,
-        `name`,
-        `organizerId`
+    "events" (
+        "id",
+        "description",
+        "when",
+        "address",
+        "name",
+        "organizerId"
     )
 VALUES
     (
-        NULL,
+        DEFAULT,
         'That is a nice event, must go there!',
         '2021-04-15 21:00:00',
         'Local St 101',

@@ -38,7 +38,9 @@ export class EventsService {
   }
 
   public async findOne(id: number): Promise<Event | undefined> {
-    return await this.eventRepository.findOneBy({ id: id });
+    return await this.eventRepository.findOne({
+      where: { id },
+    });
   }
 
   public getEventsWithAttendeesCountQuery(): SelectQueryBuilder<Event> {
@@ -144,11 +146,7 @@ export class EventsService {
   }
 
   public async deleteEvent(id: number): Promise<DeleteResult> {
-    return await this.eventRepository
-      .createQueryBuilder('e')
-      .delete()
-      .where('e.id = :id', { id })
-      .execute();
+    return await this.eventRepository.delete(id);
   }
 
   public async createEvent(input: CreateEventDto, user: User): Promise<Event> {

@@ -1,16 +1,16 @@
 INSERT INTO
-    `user` (
-        `id`,
-        `username`,
-        `password`,
-        `email`,
-        `firstName`,
-        `lastName`,
-        `profileId`
+    "user" (
+        "id",
+        "username",
+        "password",
+        "email",
+        "firstName",
+        "lastName",
+        "profileId"
     )
 VALUES
     (
-        NULL,
+        DEFAULT,
         'e2e-test',
         '$2b$10$5v5ZIVbPGXf0126yUiiys.z/POxSaus.iSbzXj7cTRW9KWGy5bfcq',
         'e2e@test.com',
