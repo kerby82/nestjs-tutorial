@@ -14,9 +14,9 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, // global to all modules
-      envFilePath: '.env',
       load: [ormConfig],
       expandVariables: true,
+      envFilePath: `${process.env.NODE_ENV}.env`,
     }), // this is used to load the .env file
     TypeOrmModule.forRootAsync({
       useFactory:
