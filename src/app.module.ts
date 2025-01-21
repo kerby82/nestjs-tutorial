@@ -33,7 +33,7 @@ import { SchoolModule } from './school/school.module';
       autoSchemaFile: true,
       debug: true,
       playground: true,
-      typePaths: ['./**/*.graphql'],
+      // typePaths: ['./**/*.graphql'],
     }),
   ],
   controllers: [AppController],
