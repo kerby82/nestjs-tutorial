@@ -8,11 +8,9 @@ import {
 import { Teacher } from './teacher.entity';
 import { ObjectType } from '@nestjs/graphql';
 import { Field } from '@nestjs/graphql';
-import { InputType } from '@nestjs/graphql';
 
 @Entity()
 @ObjectType()
-@InputType('SubjectInput')
 export class Subject {
   @PrimaryGeneratedColumn()
   @Field()
