@@ -11,6 +11,7 @@ import ormConfigProd from './config/orm.config.prod';
 import { AuthModule } from './auth/auth.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { SchoolModule } from './school/school.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
     }), // this is used to connect to the database
     EventsModule, // this does the same as the entities array in the TypeOrmModule.forRoot() call
     AuthModule,
+    SchoolModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
