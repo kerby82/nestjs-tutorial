@@ -14,9 +14,7 @@ export class TeacherResolver {
 
   @Query(() => [Teacher])
   public async teachers(): Promise<Teacher[]> {
-    return await this.teacherRepository.find({
-      relations: ['subjects'],
-    });
+    return await this.teacherRepository.find();
   }
 
   @Query(() => Teacher)
@@ -26,7 +24,6 @@ export class TeacherResolver {
   ): Promise<Teacher | undefined> {
     return await this.teacherRepository.findOneOrFail({
       where: { id },
-      relations: ['subjects'],
     });
   }
 
@@ -35,6 +32,6 @@ export class TeacherResolver {
     @Args('input', { type: () => TeacherAddInput })
     input: TeacherAddInput,
   ): Promise<Teacher> {
-    return await this.teacherRepository.save(input);
+    return await this.teacherRepository.save(new Teacher(input));
   }
 }

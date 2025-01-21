@@ -2,11 +2,14 @@ import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Subject } from './subject.entity';
 import { ObjectType } from '@nestjs/graphql';
 import { Field } from '@nestjs/graphql';
-import { InputType } from '@nestjs/graphql';
 
 @Entity()
 @ObjectType()
 export class Teacher {
+  constructor(partial?: Partial<Teacher>) {
+    Object.assign(this, partial);
+  }
+
   @PrimaryGeneratedColumn()
   @Field()
   id: number;
@@ -17,5 +20,5 @@ export class Teacher {
 
   @ManyToMany(() => Subject, (subject) => subject.teachers)
   @Field(() => [Subject])
-  subjects: Subject[];
+  subjects: Promise<Subject[]>;
 }
