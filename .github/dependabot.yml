@@ -1,17 +1,30 @@
 version: 2
+registries:
+  npm-jfrog:
+    type: npm-registry
+    url: https://instructure.jfrog.io/artifactory/api/npm/internal-npm
+    token: ${{secrets.JFROG_NPM_TOKEN}}
+    replaces-base: false
+    scope: "@inst"
+
 updates:
   - package-ecosystem: "npm"
-    directory: "/" # Location of package.json
+    directory: "/"
     schedule:
       interval: "daily"
-
+      time: "10:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 1
+    registries:
+      - npm-jfrog
     groups:
-      dev-dependencies:
+      npm-dependencies:
         patterns:
           - "*"
-        dependency-type: "development"
-
-      runtime-dependencies:
-        patterns:
-          - "*"
-        dependency-type: "production"
+        update-types:
+          - "major"
+          - "minor"
+          - "patch"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
