@@ -4,8 +4,6 @@ registries:
     type: npm-registry
     url: https://instructure.jfrog.io/artifactory/api/npm/internal-npm
     token: ${{secrets.JFROG_NPM_TOKEN}}
-    replaces-base: false
-    scope: "@inst"
 
 updates:
   - package-ecosystem: "npm"
